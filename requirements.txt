@@ -1,0 +1,6 @@
+streamlit
+speech_recognition
+transformers
+torch
+pyttsx3
+langdetect
