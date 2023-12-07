@@ -1,5 +1,5 @@
 streamlit
-speech_recognition
+speechrecognition
 transformers
 torch
 pyttsx3
