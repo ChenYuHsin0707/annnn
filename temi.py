@@ -4,6 +4,8 @@ from transformers import BertTokenizer, BertForSequenceClassification
 import torch
 import pyttsx3
 from langdetect import detect
+import pyaudio
+import wave
 
 # Load the BERT models and tokenizers for English and Chinese
 @st.cache(allow_output_mutation=True)
@@ -35,6 +37,37 @@ def convert_audio_to_text():
             return text, 'en'
         except sr.UnknownValueError:
             return "Speech recognition could not understand audio", ''
+
+# Record audio using PyAudio
+def record_audio(filename='audio.wav', duration=5, rate=44100, channels=2):
+    p = pyaudio.PyAudio()
+
+    with wave.open(filename, 'wb') as wf:
+        wf.setnchannels(channels)
+        wf.setsampwidth(pyaudio.PyAudio().get_sample_size(pyaudio.paInt16))
+        wf.setframerate(rate)
+
+        stream = p.open(format=pyaudio.paInt16,
+                        channels=channels,
+                        rate=rate,
+                        input=True,
+                        frames_per_buffer=1024)
+
+        frames = []
+
+        st.write("Recording...")
+
+        for i in range(int(rate / 1024 * duration)):
+            data = stream.read(1024)
+            frames.append(data)
+
+        st.write("Recording completed.")
+
+        stream.stop_stream()
+        stream.close()
+        p.terminate()
+
+        wf.writeframes(b''.join(frames))
 
 # Preprocess text for sentiment analysis based on language
 def preprocess_text(text, tokenizer, language):
@@ -74,7 +107,10 @@ def main():
     tokenizer_en, model_en, tokenizer_cn, model_cn = load_bert_models()
 
     if st.button("Start Recording"):
-        # Convert audio to text
+        # Record audio
+        record_audio()
+
+        # Convert recorded audio to text
         audio_text, detected_lang = convert_audio_to_text()
 
         if audio_text:
