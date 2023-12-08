@@ -4,4 +4,3 @@ transformers
 torch
 pyttsx3
 langdetect
-pyaudio
