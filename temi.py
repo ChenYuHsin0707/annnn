@@ -5,6 +5,7 @@ import torch
 import pyttsx3
 from langdetect import detect
 
+
 # Load the BERT models and tokenizers for English and Chinese
 @st.cache(allow_output_mutation=True)
 def load_bert_models():
@@ -33,7 +34,8 @@ def convert_audio_to_text():
         try:
             text = recognizer.recognize_google(audio)  # For English or other languages
             return text, 'en'
-        except sr.UnknownValueError:
+       except sr.UnknownValueError as e:
+            st.write(f"Error recognizing audio: {e}")
             return "Speech recognition could not understand audio", ''
 
 # Preprocess text for sentiment analysis based on language
