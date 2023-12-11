@@ -34,8 +34,7 @@ def convert_audio_to_text():
         try:
             text = recognizer.recognize_google(audio)  # For English or other languages
             return text, 'en'
-       except sr.UnknownValueError as e:
-            st.write(f"Error recognizing audio: {e}")
+       except sr.UnknownValueError:
             return "Speech recognition could not understand audio", ''
 
 # Preprocess text for sentiment analysis based on language
