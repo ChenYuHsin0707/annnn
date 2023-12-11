@@ -4,6 +4,15 @@ from transformers import BertTokenizer, BertForSequenceClassification
 import torch
 import pyttsx3
 from langdetect import detect
+import sys
+import os
+
+# Install PyAudio in the Streamlit virtual environment
+os.system(f"{sys.executable} -m pip install pyaudio==0.2.11")
+
+# Set the path to the PyAudio library
+os.environ["PYAUDIO_NO_PORTAUDIO"] = "1"
+os.environ["PYAUDIO_NO_PORTAUDIO_FORK"] = "1"
 
 # Load the BERT models and tokenizers for English and Chinese
 @st.cache(allow_output_mutation=True)
